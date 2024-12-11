@@ -16,9 +16,10 @@ class AuthenticationError(Exception):
 
 
 class BskyApiClient:
-    def __init__(self, username:str=None, password:str=None):
+    def __init__(self, username: str = None, password: str = None):
         self._client = Client()
         self._authenticated = False
+        self.did = None
         if username and password:
             self.authenticate(username, password)
 
@@ -26,10 +27,12 @@ class BskyApiClient:
         """Authenticate using provided credentials."""
         try:
             self._client.login(username, password)
+            self.did = self._client.me.did  # Access the 'did' attribute directly
             self._authenticated = True
         except AtProtocolError as e:
-            # Always raise AuthenticationError when AtProtocolError occurs during login
             raise AuthenticationError("Authentication failed") from e
+        except AttributeError:
+            raise AuthenticationError("Failed to retrieve user DID after authentication.")
 
     def ensure_authenticated(self):
         """Ensure the client is authenticated before making API calls."""
