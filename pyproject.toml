@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bskydata"
-version = "0.2.1"
+version = "0.2.2"
 description = ""
 authors = ["Scott Stoltzman <scottstoltzman@gmail.com>"]
 license = "Apache 2.0"
@@ -12,6 +12,8 @@ keywords = ["bluesky", "bsky", "api", "wrapper", "atproto"]
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
 bskyapi = "^0.2.1"
+neo4j = "^5.27.0"
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
