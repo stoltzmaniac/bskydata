@@ -6,12 +6,12 @@ from atproto import models, client_utils
 class BskyAgent:
     def __init__(self, client: BskyApiClient):
         self.client = client
+    
+    def new_post(self):
         self.post = None
         self.images = None
         self.images_alt = None
         self.post_response = None
-    
-    def new_post(self):
         self.post = client_utils.TextBuilder()
         return self
     
@@ -62,5 +62,5 @@ class BskyAgent:
         else:
             raise ValueError("No post content provided.")
         self.post_response = response
+        self.post = None
         print("Post created successfully!")
-        return self.post_response

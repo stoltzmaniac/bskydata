@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bskydata"
-version = "0.3.1"
+version = "0.3.2"
 description = ""
 authors = ["Scott Stoltzman <scottstoltzman@gmail.com>"]
 license = "Apache 2.0"
