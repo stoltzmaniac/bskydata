@@ -28,22 +28,22 @@ client = BskyApiClient(username = BSKY_USERNAME,
 
 # Scrape all posts for the search term "rstats"
 st_scraper = SearchTermScraper(client)
-rstats_posts = st_scraper.fetch_all_posts("rstats", limit=100)
+rstats_posts = st_scraper.fetch_all_posts("rstats", limit=200)
 
 # Scrape user: follows, followers, profiles
 pf_scraper = ProfileScraper(client)
 profiles = pf_scraper.fetch_all_profiles(["stoltzmaniac.bsky.social", "bsky.app"])
-profile_follows = pf_scraper.fetch_all_follows("stoltzmaniac.bsky.social", limit=100)
-profile_followers = pf_scraper.fetch_all_followers("stoltzmaniac.bsky.social", limit=100)
+profile_follows = pf_scraper.fetch_all_follows("stoltzmaniac.bsky.social", limit=200)
+profile_followers = pf_scraper.fetch_all_followers("stoltzmaniac.bsky.social", limit=200)
 
 # Add output files -- you can specify different file names within each method if you prefer not to use the defaults
 json_writer = JsonFileWriter()
 scraper = SearchTermScraper(client, writer=json_writer)
-data = scraper.fetch_all_posts("rstats", limit=100)
+data = scraper.fetch_all_posts("rstats", limit=200)
 
 pf_scraper = ProfileScraper(client, writer=json_writer)
-profiles = pf_scraper.fetch_all_profiles(["umbersar.bsky.social"])
-profile_follows = pf_scraper.fetch_all_follows("umbersar.bsky.social", limit=1000)
-profile_followers = pf_scraper.fetch_all_followers("stoltzmaniac.bsky.social", limit=100)
+profiles = pf_scraper.fetch_all_profiles(["stoltzmaniac.bsky.social"])
+profile_follows = pf_scraper.fetch_all_follows("stoltzmaniac.bsky.social", limit=200)
+profile_followers = pf_scraper.fetch_all_followers("stoltzmaniac.bsky.social", limit=200)
 ```
 

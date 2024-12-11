@@ -28,7 +28,7 @@ class ProfileScraper:
             self.writer.write(profiles, destination=output_file)
         return profiles
 
-    def fetch_all_follows(self, actor: str, limit: int = 1000, output_file: str = "follows.json") -> t.List[dict]:
+    def fetch_all_follows(self, actor: str, limit: int = 1000, output_file: str = "follows.json") -> dict:
         all_follows = []
         cursor = None
         limit_check = 0
@@ -41,11 +41,15 @@ class ProfileScraper:
             if not cursor or limit_check > limit:
                 break
             time.sleep(2)
+        all_follows_final = {
+            "actor": actor,
+            "follows": all_follows
+        }
         if self.writer:
-            self.writer.write(all_follows, destination=output_file)
-        return all_follows
+            self.writer.write(all_follows_final, destination=output_file)
+        return all_follows_final
 
-    def fetch_all_followers(self, actor: str, limit: int = 1000, output_file: str = "followers.json") -> t.List[dict]:
+    def fetch_all_followers(self, actor: str, limit: int = 1000, output_file: str = "followers.json") -> dict:
         all_followers = []
         cursor = None
         limit_check = 0
@@ -58,6 +62,10 @@ class ProfileScraper:
             if not cursor or limit_check > limit:
                 break
             time.sleep(2)
+        all_followers_final = {
+            "actor": actor,
+            "followers": all_followers
+        }
         if self.writer:
-            self.writer.write(all_followers, destination=output_file)
-        return all_followers
+            self.writer.write(all_followers_final, destination=output_file)
+        return all_followers_final
