@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "bskydata"
+version = "0.2.1"
+description = ""
+authors = ["Scott Stoltzman <scottstoltzman@gmail.com>"]
+license = "Apache 2.0"
+readme = "README.md"
+homepage = "https://github.com/stoltzmaniac/bskydata"
+repository = "https://github.com/stoltzmaniac/bskydata"
+keywords = ["bluesky", "bsky", "api", "wrapper", "atproto"]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+bskyapi = "^0.2.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-mock = "^3.14.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
