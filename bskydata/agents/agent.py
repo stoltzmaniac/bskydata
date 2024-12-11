@@ -9,6 +9,7 @@ class BskyAgent:
         self.post = None
         self.images = None
         self.images_alt = None
+        self.post_response = None
     
     def new_post(self):
         self.post = client_utils.TextBuilder()
@@ -60,4 +61,6 @@ class BskyAgent:
             response = self.client.client.send_post(self.post)
         else:
             raise ValueError("No post content provided.")
+        self.post_response = response
         print("Post created successfully!")
+        return self.post_response
