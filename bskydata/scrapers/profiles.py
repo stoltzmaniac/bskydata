@@ -24,6 +24,8 @@ class ProfileScraper:
 
     def fetch_all_profiles(self, actors: list, output_file: str = "profiles.json") -> dict:
         profiles = self.bsky_client.client.get_profiles(actors).model_dump()
+        profiles['actors'] = actors
+        profiles["creeated_at"] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
         if self.writer:
             self.writer.write(profiles, destination=output_file)
         return profiles
@@ -43,6 +45,7 @@ class ProfileScraper:
             time.sleep(2)
         all_follows_final = {
             "actor": actor,
+            "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "follows": all_follows
         }
         if self.writer:
@@ -64,6 +67,7 @@ class ProfileScraper:
             time.sleep(2)
         all_followers_final = {
             "actor": actor,
+            "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "followers": all_followers
         }
         if self.writer:
