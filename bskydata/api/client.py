@@ -1,5 +1,8 @@
+import os
+from dotenv import load_dotenv
 from atproto import Client
 from atproto.exceptions import AtProtocolError
+load_dotenv()
 
 
 def requires_authentication(func):
@@ -22,6 +25,8 @@ class BskyApiClient:
         self.did = None
         if username and password:
             self.authenticate(username, password)
+        elif os.getenv('BSKY_USERNAME') and os.getenv('BSKY_PASSWORD'):
+            self.authenticate(os.getenv('BSKY_USERNAME'), os.getenv('BSKY_PASSWORD'))
 
     def authenticate(self, username: str, password: str):
         """Authenticate using provided credentials."""
