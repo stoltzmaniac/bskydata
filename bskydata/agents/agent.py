@@ -20,6 +20,7 @@ class BskyAgent:
         return self
     
     def add_mention(self, username: str, did: str = None):
+        self.post.text(" @")
         if did is None:
             profile = self.client.client.get_profile(username)
             self.post.mention(username, profile.did)
@@ -28,10 +29,12 @@ class BskyAgent:
         return self
     
     def add_tag(self, text: str, label: str):
+        self.post.text(" #")
         self.post.tag(text, label)
         return self
     
     def add_link(self, text: str, url: str):
+        self.post.text(" ")
         self.post.link(text, url)
         return self
     
