@@ -40,6 +40,7 @@ class SearchTermScraper:
             time.sleep(2)
         all_posts_final = {
             "search_term": search_term,
+            "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "posts": all_posts
         }
         # Write the fetched posts using the writer

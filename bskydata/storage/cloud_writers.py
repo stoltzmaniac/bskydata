@@ -1,4 +1,4 @@
-from typing import t
+import typing as t
 from bskydata.storage.base_writers import CloudDataWriter
 
 

@@ -1,5 +1,5 @@
 import json
-from typing import t
+import typing as t
 from pathlib import Path
 from bskydata.storage.base_writers import DataWriter
 
