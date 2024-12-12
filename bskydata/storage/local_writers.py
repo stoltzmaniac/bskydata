@@ -1,23 +1,10 @@
-import typing as t
 import json
+from typing import t
 from pathlib import Path
-from abc import ABC, abstractmethod
+from bskydata.storage.base_writers import DataWriter
 
 
-class DataWriter(ABC):
-    @abstractmethod
-    def write(self, data: t.Any, destination: str = None, **kwargs):
-        """
-        Write data to a destination.
-        
-        :param data: The data to write.
-        :param destination: Optional dynamic destination (e.g., file name, database table).
-        :param kwargs: Additional parameters for customization.
-        """
-        pass
-
-
-class JsonFileWriter(DataWriter):
+class LocalJsonFileWriter(DataWriter):
     def __init__(self, default_file: str = None, indent: int = 4, sort_keys: bool = True):
         """
         :param default_file: Default file name if none is provided dynamically.

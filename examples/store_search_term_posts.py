@@ -1,14 +1,17 @@
 import argparse
 from bskydata.api.client import BskyApiClient
 from bskydata.scrapers.search_terms import SearchTermScraper
-from bskydata.storage.writers import JsonFileWriter
+from bskydata.storage.base_writers import JsonFileWriter
+
+# Example usage: python examples/store_search_term_posts.py --search_term "rstats" --limit 200
+# Username and Password are stored in a .env file and automatically loaded
+# If you don't use a .env file, enter them in the BskyApiClient(USERNAME, PASSWORD)
 
 def main(search_term: str, limit: int = 200):
     print(f"Searching for posts with the term '{search_term}' on the BlueSky platform...")
-    # Username and Password are stored in the .env file and automatically loaded
     client = BskyApiClient()
 
-    # Scrape all posts for the search term "rstats"
+    # Scrape all posts for the search_term
     json_writer = JsonFileWriter(f"{search_term}_posts.json")
     scraper = SearchTermScraper(client, writer=json_writer)
     rstats_posts = scraper.fetch_all_posts(search_term, limit=limit)
@@ -23,4 +26,3 @@ if __name__ == "__main__":
     parser.add_argument("--limit", type=int, default=200, help="The maximum number of posts to fetch.")
     args = parser.parse_args()
     main(args.search_term, args.limit)
-    # Example usage: python examples/store_search_term_posts.py --search_term "rstats" --limit 200

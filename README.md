@@ -5,6 +5,13 @@ This is built as a wrapper for the `atproto` package. While that package is fant
 ### Installation
 ```
 pip install bskydata
+
+# Optional
+pip install bskydata[azure]
+pip install bskydata[aws]
+pip install bskydata[gcp]
+pip install bskydata[azure, aws, gcp]
+
 ```
 
 ### Example usage
@@ -49,11 +56,11 @@ profile_followers = pf_scraper.fetch_all_followers("stoltzmaniac.bsky.social", l
 # Making a post
 agent = BskyAgent(client)
 agent.new_post()\
-    .add_text("Python API (sorry for multiple)--text--")\
+    .add_text("This is an example of the python bskydata package!")\
     .add_link("Bluesky", "https://bsky.app")\
     .add_image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cute_dog.jpg/1600px-Cute_dog.jpg", "dog")\
     .add_image("cat.png", "cat")\
-    .add_mention("@stoltzmaniac.bsky.social", 'did:plc:6p3e4iybr5ipik3c6tx3jpto')\
+    .add_mention("@stoltzmaniac.bsky.social")\
     .send_post()
 
 # If you don't know the "did" ... which most people don't, it will look it up for you
