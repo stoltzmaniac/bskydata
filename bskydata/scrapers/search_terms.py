@@ -1,7 +1,7 @@
 import time
 import typing as t
 from bskydata.api.client import BskyApiClient
-from bskydata.storage.base_writers import DataWriter
+from bskydata.storage.base import DataWriter
 from atproto import models
 
 

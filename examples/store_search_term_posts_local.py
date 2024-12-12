@@ -1,9 +1,9 @@
 import argparse
 from bskydata.api.client import BskyApiClient
 from bskydata.scrapers.search_terms import SearchTermScraper
-from bskydata.storage.local_writers import LocalJsonFileWriter
+from bskydata.storage.local.local_writers import LocalJsonFileWriter
 
-# Example usage: python examples/store_search_term_posts.py --search_term "rstats" --limit 200
+# Example usage: python examples/store_search_term_posts_local.py --search_term "rstats" --limit 200
 # Username and Password are stored in a .env file and automatically loaded
 # If you don't use a .env file, enter them in the BskyApiClient(USERNAME, PASSWORD)
 

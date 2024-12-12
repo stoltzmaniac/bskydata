@@ -1,7 +1,6 @@
-import json
 import typing as t
 from pathlib import Path
-from bskydata.storage.base_writers import DataWriter
+from bskydata.storage.base import DataWriter, JsonFileHandler
 
 
 class LocalJsonFileWriter(DataWriter):
@@ -12,8 +11,7 @@ class LocalJsonFileWriter(DataWriter):
         :param sort_keys: Whether to sort keys alphabetically (default is True).
         """
         self.default_file = default_file
-        self.indent = indent
-        self.sort_keys = sort_keys
+        self.json_handler = JsonFileHandler(indent=indent, sort_keys=sort_keys)
 
     def write(self, data: t.Any, destination: str = None, **kwargs):
         """
@@ -30,12 +28,5 @@ class LocalJsonFileWriter(DataWriter):
         # Ensure the destination directory exists
         Path(file_name).parent.mkdir(parents=True, exist_ok=True)
         
-        # Pretty print the JSON data with indenting and optional key sorting
-        with open(file_name, "w", encoding="utf-8") as f:
-            json.dump(
-                data, 
-                f, 
-                indent=self.indent, 
-                sort_keys=self.sort_keys, 
-                separators=(',', ': ')  # Add spaces after commas and colons
-            )
+        # Delegate JSON writing to JsonFileHandler
+        self.json_handler.write_to_file(data, file_name)
