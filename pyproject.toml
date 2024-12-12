@@ -13,7 +13,14 @@ keywords = ["bluesky", "bsky", "api", "wrapper", "atproto"]
 python = ">=3.11,<3.14"
 atproto = "^0.0.56"
 python-dotenv = "^1.0.1"
+azure-storage-blob = {"version" = "^12.24.0", optional = true}
+boto3 = {"version" = "^1.35.79", optional = true}
+google-cloud-storage = {"version" = "^2.19.0", optional = true}
 
+[tool.poetry.extras]
+azure = ["azure-storage-blob"]
+aws = ["boto3"]
+google = ["google-cloud-storage"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
