@@ -2,13 +2,15 @@ import time
 import typing as t
 from bskydata.api.client import BskyApiClient
 from atproto import models
-from bskydata.storage.base_writers import DataWriter
+from bskydata.storage.base import DataWriter
+from bskydata.parsers.base import DataParser
 
 
 class ProfileScraper:
-    def __init__(self, bsky_client: BskyApiClient, writer: DataWriter = None):
+    def __init__(self, bsky_client: BskyApiClient, writer: DataWriter = None, parser: DataParser = None):
         self.bsky_client = bsky_client
         self.writer = writer
+        self.parser = parser
     
     def _fetch_follows(self, actor: str, cursor: t.Union[str, None] = None) -> models.AppBskyGraphGetFollows.Response:
         params = models.AppBskyGraphGetFollows.Params(actor=actor, limit=100)
@@ -25,7 +27,9 @@ class ProfileScraper:
     def fetch_all_profiles(self, actors: list, output_file: str = "profiles.json") -> dict:
         profiles = self.bsky_client.client.get_profiles(actors).model_dump()
         profiles['actors'] = actors
-        profiles["creeated_at"] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        profiles["created_at"] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        if self.parser:
+            profiles = self.parser.parse(profiles)
         if self.writer:
             self.writer.write(profiles, destination=output_file)
         return profiles
@@ -48,6 +52,8 @@ class ProfileScraper:
             "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "follows": all_follows
         }
+        if self.parser:
+            all_follows_final = self.parser.parse(all_follows_final)
         if self.writer:
             self.writer.write(all_follows_final, destination=output_file)
         return all_follows_final
@@ -70,6 +76,8 @@ class ProfileScraper:
             "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "followers": all_followers
         }
+        if self.parser:
+            all_followers_final = self.parser.parse(all_followers_final)
         if self.writer:
             self.writer.write(all_followers_final, destination=output_file)
         return all_followers_final
