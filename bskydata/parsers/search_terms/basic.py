@@ -41,6 +41,7 @@ class BasicSearchTermsParser(DataParser):
         return [
             {
                 "author_display_name": post.get("author", {}).get("display_name", ""),
+                "author_did": post.get("author", {}).get("did", ""),
                 "author_handle": post.get("author", {}).get("handle", ""),
                 "post_text": post.get("record", {}).get("text", ""),
                 "tags": self._extract_tags(post.get("record", {}).get("facets", [])),

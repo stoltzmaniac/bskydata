@@ -2,6 +2,7 @@ import argparse
 from bskydata.api.client import BskyApiClient
 from bskydata.scrapers.search_terms import SearchTermScraper
 from bskydata.storage.local.local_writers import LocalJsonFileWriter
+from bskydata.parsers.search_terms.basic import BasicSearchTermsParser
 
 # Example usage: python examples/store_search_term_posts_local.py --search_term "rstats" --limit 200
 # Username and Password are stored in a .env file and automatically loaded
@@ -13,7 +14,8 @@ def main(search_term: str, limit: int = 200):
 
     # Scrape all posts for the search_term
     json_writer = LocalJsonFileWriter(f"{search_term}_posts.json")
-    scraper = SearchTermScraper(client, writer=json_writer)
+    search_parser = BasicSearchTermsParser()
+    scraper = SearchTermScraper(client, writer=json_writer, parser=search_parser)
     posts = scraper.fetch_all_posts(search_term, limit=limit)
     print(f"Scraped {len(posts['posts'])} posts for the search term '{search_term}'")
     print(f"Posts saved to {search_term}_posts.json")

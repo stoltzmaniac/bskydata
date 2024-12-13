@@ -2,17 +2,19 @@ import time
 import typing as t
 from bskydata.api.client import BskyApiClient
 from bskydata.storage.base import DataWriter
+from bskydata.parsers.base import DataParser
 from atproto import models
 
 
 class SearchTermScraper:
-    def __init__(self, bsky_client: BskyApiClient, writer: DataWriter = None):
+    def __init__(self, bsky_client: BskyApiClient, writer: DataWriter = None, parser: DataParser = None):
         """
         :param bsky_client: Instance of BskyApiClient.
         :param writer: Writer instance for outputting fetched posts.
         """
         self.bsky_client = bsky_client
         self.writer = writer
+        self.parser = parser
 
     def _fetch(self, search_term: str, cursor: t.Union[int, None] = None) -> models.AppBskyFeedSearchPosts.Response:
         params = {"q": search_term, 'limit': 100}
@@ -43,6 +45,8 @@ class SearchTermScraper:
             "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "posts": all_posts
         }
+        if self.parser:
+            all_posts_final = self.parser.parse(all_posts_final)
         # Write the fetched posts using the writer
         if self.writer:
             self.writer.write(all_posts_final, destination=output_file)
