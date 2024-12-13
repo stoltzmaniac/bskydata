@@ -11,7 +11,7 @@ pip install bskydata[azure]
 pip install bskydata[aws]
 pip install bskydata[gcp]
 pip install bskydata[azure, aws, gcp]
-
+pip install bskydata[mongodb]
 ```
 
 ### Examples are easy to follow in the "examples" folder of this repo
