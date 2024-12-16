@@ -1,7 +1,7 @@
 import time
 import typing as t
 from bskydata.api.client import BskyApiClient
-from bskydata.storage.base import DataWriter
+from bskydata.storage.writers.base import DataWriter
 from bskydata.parsers.base import DataParser
 from atproto import models
 
@@ -22,11 +22,11 @@ class SearchTermScraper:
             params['cursor'] = cursor
         return self.bsky_client.client.app.bsky.feed.search_posts(params=params)
 
-    def fetch_all_posts(
+    def fetch(
         self, 
         search_term: str, 
+        destination: str,
         limit: int = 1000, 
-        output_file: str = "search_results.json"
     ) -> dict:
         all_posts = []
         cursor = None
@@ -49,6 +49,6 @@ class SearchTermScraper:
             all_posts_final = self.parser.parse(all_posts_final)
         # Write the fetched posts using the writer
         if self.writer:
-            self.writer.write(all_posts_final, destination=output_file)
+            self.writer.write(all_posts_final, destination=destination)
 
         return all_posts_final

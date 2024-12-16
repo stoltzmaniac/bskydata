@@ -1,8 +1,8 @@
 import typing as t
 import json
 from azure.storage.blob import BlobServiceClient
-from bskydata.storage.base import JsonFileHandler
-from bskydata.storage.cloud.base import CloudDataWriter
+from bskydata.storage.handlers.json import JsonFileHandler
+from bskydata.storage.writers.cloud.base import CloudDataWriter
 
 
 class AzureDataWriter(CloudDataWriter):

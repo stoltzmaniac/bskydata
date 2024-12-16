@@ -1,6 +1,6 @@
 import requests
 from bskydata.api.client import BskyApiClient
-from atproto import models, client_utils
+from atproto import client_utils
 
 
 class BskyAgent:

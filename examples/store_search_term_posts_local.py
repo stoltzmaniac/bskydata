@@ -1,7 +1,7 @@
 import argparse
 from bskydata.api.client import BskyApiClient
 from bskydata.scrapers.search_terms import SearchTermScraper
-from bskydata.storage.local.local_writers import LocalJsonFileWriter
+from bskydata.storage.local.local_writers import LocalJsonDataWriter
 from bskydata.parsers.search_terms.basic import BasicSearchTermsParser
 
 # Example usage: python examples/store_search_term_posts_local.py --search_term "rstats" --limit 200
@@ -13,7 +13,7 @@ def main(search_term: str, limit: int = 200):
     client = BskyApiClient()
 
     # Scrape all posts for the search_term
-    json_writer = LocalJsonFileWriter(f"{search_term}_posts.json")
+    json_writer = LocalJsonDataWriter(f"{search_term}_posts.json")
     search_parser = BasicSearchTermsParser()
     scraper = SearchTermScraper(client, writer=json_writer, parser=search_parser)
     posts = scraper.fetch_all_posts(search_term, limit=limit)

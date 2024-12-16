@@ -1,7 +1,7 @@
 import typing as t
 from google.cloud import storage
-from bskydata.storage.cloud.base import CloudDataWriter
-from bskydata.storage.base import JsonFileHandler
+from bskydata.storage.writers.cloud.base import CloudDataWriter
+from bskydata.storage.handlers.json import JsonFileHandler
 
 
 class GCPDataWriter(CloudDataWriter):

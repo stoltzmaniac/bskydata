@@ -1,5 +1,5 @@
 import typing as t
-from bskydata.storage.base import DataWriter
+from bskydata.storage.writers.base import DataWriter
 from pymongo import MongoClient
 
 
