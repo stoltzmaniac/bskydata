@@ -60,8 +60,14 @@ class BasicSearchTermsParser(DataParser):
         Returns:
             List[str]: List of extracted tags.
         """
-        return [
-            facet.get("features", [{}])[0].get("tag", "")
-            for facet in facets
-            if "features" in facet and "tag" in facet["features"][0]
-        ]
+        tags = []
+        if facets is not None:
+            for facet in facets:
+                # Check if 'features' is in the facet and is a non-empty list
+                features = facet.get("features", [])
+                if features and isinstance(features, list):
+                    # Check if the first feature contains a 'tag'
+                    first_feature = features[0]
+                    if isinstance(first_feature, dict) and "tag" in first_feature:
+                        tags.append(first_feature["tag"])
+        return tags
