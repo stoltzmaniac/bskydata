@@ -1,7 +1,7 @@
 import typing as t
 import boto3
-from bskydata.storage.cloud.base import CloudDataWriter
-from bskydata.storage.base import JsonFileHandler
+from bskydata.storage.writers.cloud.base import CloudDataWriter
+from bskydata.storage.handlers.json import JsonFileHandler
 
 class S3DataWriter(CloudDataWriter):
     def __init__(self, aws_access_key: str, aws_secret_key: str, bucket_name: str):

@@ -1,19 +1,5 @@
-import typing as t
-from abc import ABC, abstractmethod
 import json
-
-
-class DataWriter(ABC):
-    @abstractmethod
-    def write(self, data: t.Any, destination: str = None, **kwargs):
-        """
-        Write data to a destination.
-        
-        :param data: The data to write.
-        :param destination: Optional dynamic destination (e.g., file name, database table).
-        :param kwargs: Additional parameters for customization.
-        """
-        pass
+import typing as t
 
 
 class JsonFileHandler:
@@ -59,4 +45,3 @@ class JsonFileHandler:
                 separators=(',', ': ')  # Add spaces after commas and colons
             )
             return temp_file.name
-        

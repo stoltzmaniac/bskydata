@@ -1,10 +1,14 @@
 import typing as t
 from pathlib import Path
-from bskydata.storage.base import DataWriter, JsonFileHandler
+from bskydata.storage.handlers.json import JsonFileHandler
+from bskydata.storage.writers.base import DataWriter
 
 
 class LocalJsonFileWriter(DataWriter):
-    def __init__(self, default_file: str = None, indent: int = 4, sort_keys: bool = True):
+    def __init__(self, 
+                 default_file: str = None, 
+                 indent: int = 4, 
+                 sort_keys: bool = True):
         """
         :param default_file: Default file name if none is provided dynamically.
         :param indent: Number of spaces to use for indentation (default is 4).
