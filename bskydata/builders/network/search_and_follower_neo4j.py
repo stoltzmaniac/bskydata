@@ -91,7 +91,7 @@ class BuildNetworkSearchAndFollowsNeo4j:
         UNWIND $posts AS post_data
         
         // Merge Author
-        MERGE (author:Author {did: post_data.did})
+        MERGE (author:Author {did: post_data.author_did})
         ON CREATE SET author.display_name = post_data.author_display_name,
                     author.handle = post_data.author_handle
 
