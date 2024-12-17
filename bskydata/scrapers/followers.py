@@ -34,7 +34,7 @@ class FollowersScraper:
             all_followers.extend(followers)
             if not cursor or limit_check > limit:
                 break
-            time.sleep(2)
+            time.sleep(1)
         all_followers_final = {
             "actor": actor,
             "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
