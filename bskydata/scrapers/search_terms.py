@@ -39,7 +39,7 @@ class SearchTermScraper:
                 break
             if int(cursor) > limit:
                 break
-            time.sleep(2)
+            time.sleep(1)
         all_posts_final = {
             "search_term": search_term,
             "created_at":  time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
