@@ -116,6 +116,7 @@ class BuildNetworkSearchAndFollowsNeo4j:
 
     def run(self, search_term: str):
         search_data = self._scrape_search_posts(search_term)
+        self._insert_posts_bulk(search_data["posts"])
         unique_actors = list(set([p['author_did'] for p in search_data["posts"]]))
         n = 0
         for actor in unique_actors:
