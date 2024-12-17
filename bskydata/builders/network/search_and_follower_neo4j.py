@@ -1,3 +1,4 @@
+from neo4j.exceptions import SessionExpired
 from bskydata.storage.writers.database.neo4j import Neo4jDataWriter
 from bskydata.api import BskyApiClient
 from bskydata.scrapers import FollowsScraper, SearchTermScraper, ProfilesScraper
@@ -12,6 +13,7 @@ class BuildNetworkSearchAndFollowsNeo4j:
                  neo4j_uri:str,
                  neo4j_username:str,
                  neo4j_password:str):
+        
         self.client = BskyApiClient(
             username=bsky_username,
             password=bsky_password
@@ -74,11 +76,15 @@ class BuildNetworkSearchAndFollowsNeo4j:
         MERGE (actor)-[r:FOLLOWS]->(followed)
         ON CREATE SET r.created_at = follow.created_at
         """
-        self.writer.session.run(query, 
-                    actor_did=data["actor"],
-                    actor_display_name=data.get("actor_display_name", ""),
-                    actor_handle=data.get("actor_handle", ""),
-                    follows=data["follows"])
+        try:
+            self.writer.session.run(query, 
+                        actor_did=data["actor"],
+                        actor_display_name=data.get("actor_display_name", ""),
+                        actor_handle=data.get("actor_handle", ""),
+                        follows=data["follows"])
+        except SessionExpired:
+            self.writer.session.close()
+            self.writer.session = self.writer.driver.session()
 
     def _insert_posts_bulk(self, posts):
         query = """
@@ -102,8 +108,11 @@ class BuildNetworkSearchAndFollowsNeo4j:
             MERGE (post)-[:HAS_TAG]->(tag)
         )
         """
-        self.writer.session.run(query, posts=posts)
-
+        try:
+            self.writer.session.run(query, posts=posts)
+        except SessionExpired:
+            self.writer.session.close()
+            self.writer.session = self.writer.driver.session()
 
     def run(self, search_term: str):
         search_data = self._scrape_search_posts(search_term)
@@ -112,14 +121,7 @@ class BuildNetworkSearchAndFollowsNeo4j:
         for actor in unique_actors:
             n += 1
             print(f"Store follows for the following profiles: {actor}. {n}/{len(unique_actors)}")
-            actor_profile = self._scrape_profiles([actor])['profiles'][0]
             follows = self._scrape_follows(actor)
-            follows_actor = {
-                "actor": actor,
-                "actor_display_name": actor_profile['display_name'],
-                "actor_handle": actor_profile['handle'],
-                "follows": follows['follows']
-            }
             self._insert_follows(follows)
         self.writer.disconnect()
         print("Data stored successfully.")
