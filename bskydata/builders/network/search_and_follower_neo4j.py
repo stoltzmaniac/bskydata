@@ -142,7 +142,7 @@ class BuildNetworkSearchAndFollowsNeo4j:
         search_data = self._scrape_search_posts(search_term)
         # ensure search term is the hashtag
         hashtag = f"#{search_term}"
-        tmp = [p for p in search_data["posts"] if hashtag in p["post_text"]]
+        tmp = [p for p in search_data["posts"] if hashtag in p["post_text"].lower()]
         search_data["posts"] = tmp
         self._insert_posts_bulk(search_data["posts"])
         unique_actors = list(set([p['author_did'] for p in search_data["posts"]]))
