@@ -64,13 +64,25 @@ class BuildNetworkSearchAndFollowsNeo4j:
         query = """
         MERGE (actor:Author {did: $actor_did})
         ON CREATE SET actor.display_name = $actor_display_name, 
-                      actor.handle = $actor_handle
+                    actor.handle = $actor_handle
+        ON MATCH SET actor.display_name = CASE 
+            WHEN actor.display_name IS NULL OR actor.display_name = "" THEN $actor_display_name 
+            ELSE actor.display_name END,
+                    actor.handle = CASE 
+            WHEN actor.handle IS NULL OR actor.handle = "" THEN $actor_handle 
+            ELSE actor.handle END
 
         WITH actor
         UNWIND $follows AS follow
         MERGE (followed:Author {did: follow.did})
         ON CREATE SET followed.display_name = follow.display_name, 
-                      followed.handle = follow.handle
+                    followed.handle = follow.handle
+        ON MATCH SET followed.display_name = CASE 
+            WHEN followed.display_name IS NULL OR followed.display_name = "" THEN follow.display_name 
+            ELSE followed.display_name END,
+                    followed.handle = CASE 
+            WHEN followed.handle IS NULL OR followed.handle = "" THEN follow.handle 
+            ELSE followed.handle END
 
         MERGE (actor)-[r:FOLLOWS]->(followed)
         ON CREATE SET r.created_at = follow.created_at
