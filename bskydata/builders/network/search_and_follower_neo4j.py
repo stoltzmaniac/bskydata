@@ -1,4 +1,5 @@
 from neo4j.exceptions import SessionExpired
+from atproto_client.exceptions import InvokeTimeoutError
 from bskydata.storage.writers.database.neo4j import Neo4jDataWriter
 from bskydata.api import BskyApiClient
 from bskydata.scrapers import FollowsScraper, SearchTermScraper, ProfilesScraper
@@ -14,9 +15,12 @@ class BuildNetworkSearchAndFollowsNeo4j:
                  neo4j_username:str,
                  neo4j_password:str):
         
+        self.bsky_username = bsky_username
+        self.bsky_password = bsky_password
+
         self.client = BskyApiClient(
-            username=bsky_username,
-            password=bsky_password
+            username=self.bsky_username,
+            password=self.bsky_password
         )
 
         self.writer = Neo4jDataWriter(
@@ -117,6 +121,8 @@ class BuildNetworkSearchAndFollowsNeo4j:
         FOREACH (tag_name IN post_data.tags | 
             MERGE (tag:Tag {name: toLower(tag_name)})
             MERGE (post)-[:HAS_TAG]->(tag)
+            // Create the virtual USED_TAG relationship between Author and Tag
+            MERGE (author)-[:USED_TAG]->(tag)
         )
 
         // Merge Mentions and Relationships
@@ -131,8 +137,13 @@ class BuildNetworkSearchAndFollowsNeo4j:
             self.writer.session.close()
             self.writer.session = self.writer.driver.session()
 
+
     def run(self, search_term: str):
         search_data = self._scrape_search_posts(search_term)
+        # ensure search term is the hashtag
+        hashtag = f"#{search_term}"
+        tmp = [p for p in search_data["posts"] if hashtag in p["post_text"]]
+        search_data["posts"] = tmp
         self._insert_posts_bulk(search_data["posts"])
         unique_actors = list(set([p['author_did'] for p in search_data["posts"]]))
         n = 0

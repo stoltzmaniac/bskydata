@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-SEARCH_TERMS = ["rstats", "python"]
+SEARCH_TERMS = ["stata", "python", "rstats"]
 for search_term in SEARCH_TERMS:
     print(f"Searching for {search_term}")
     builder = BuildNetworkSearchAndFollowsNeo4j(
@@ -15,4 +15,3 @@ for search_term in SEARCH_TERMS:
         neo4j_password=os.getenv('NEO4J_PASSWORD')
     )
     data = builder.run(search_term)
-
