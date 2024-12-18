@@ -45,6 +45,7 @@ class BasicSearchTermsParser(DataParser):
                 "author_handle": post.get("author", {}).get("handle", ""),
                 "post_text": post.get("record", {}).get("text", ""),
                 "tags": self._extract_tags(post.get("record", {}).get("facets", [])),
+                "mentions": self._extract_mentions(post.get("record", {}).get("facets", [])),
                 "post_created_at": post.get("record", {}).get("created_at", "")
             }
             for post in posts
@@ -66,8 +67,30 @@ class BasicSearchTermsParser(DataParser):
                 # Check if 'features' is in the facet and is a non-empty list
                 features = facet.get("features", [])
                 if features and isinstance(features, list):
-                    # Check if the first feature contains a 'tag'
-                    first_feature = features[0]
-                    if isinstance(first_feature, dict) and "tag" in first_feature:
-                        tags.append(first_feature["tag"])
+                    for feature in features:
+                        # Look for features with type 'mention' and a valid handle
+                        if feature.get("py_type") == "app.bsky.richtext.facet#tag":
+                            tags.append(feature["tag"])
         return tags
+    
+    def _extract_mentions(self, facets: List[Dict[str, Any]]) -> List[str]:
+        """
+        Extract mentions of other users from post facets.
+
+        Args:
+            facets (List[Dict[str, Any]]): List of facet dictionaries.
+
+        Returns:
+            List[str]: List of extracted mention handles.
+        """
+        mentions = []
+        if facets is not None:
+            for facet in facets:
+                # Check if 'features' is in the facet and is a non-empty list
+                features = facet.get("features", [])
+                if features and isinstance(features, list):
+                    for feature in features:
+                        # Look for features with type 'mention' and a valid handle
+                        if feature.get("py_type") == "app.bsky.richtext.facet#mention":
+                            mentions.append(feature["did"])
+        return mentions

@@ -42,9 +42,8 @@ class BuildNetworkSearchAndFollowsNeo4j:
                                 parser=basic_parser)
 
         follows = scraper.fetch(actor, 
-                                destination=f"follows.json",
+                                destination="follows.json",
                                 limit=limit)
-        
         return follows
     
     def _scrape_search_posts(self, search_term:str, limit:int = 2000):
@@ -106,6 +105,12 @@ class BuildNetworkSearchAndFollowsNeo4j:
         FOREACH (tag_name IN post_data.tags | 
             MERGE (tag:Tag {name: toLower(tag_name)})
             MERGE (post)-[:HAS_TAG]->(tag)
+        )
+
+        // Merge Mentions and Relationships
+        FOREACH (mention_handle IN post_data.mentions | 
+            MERGE (mention:Author {did: mention_handle})
+            MERGE (post)-[:MENTIONS]->(mention)
         )
         """
         try:
