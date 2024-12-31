@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-SEARCH_TERMS = ["stata", "python", "rstats"]
+# SEARCH_TERMS = ["stata", "python", "rstats"]
+SEARCH_TERMS = ["golang"]
 for search_term in SEARCH_TERMS:
     print(f"Searching for {search_term}")
     builder = BuildNetworkSearchAndFollowsNeo4j(
